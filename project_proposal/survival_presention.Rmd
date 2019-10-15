@@ -16,15 +16,15 @@ library(kableExtra)
 
 ## Group Introduction
 - David Chen
-  - Masters of Biostatistics with interests in approaches to optimal dynamic treatment and psychiatric disorders
+  - Masters of Biostatistics interested in approaches to optimal dynamic treatment and applications in mental health
   
 - Max Murphy
   - PhD. Biostatistics working on malaria transmission dynamics jointly with Dr. Rasmus Nielsen at UCB and Dr. Bryan Greenhouse at UCSF
 
 ## Study Background
 <!-- A study was conducted in Zambia to improve estimates of baseline mortality due to HIV. In the context of this observational study, a subset of individuals who were lost to follow up were assigned to receive extra care through follow up outreach by community health workers. This raises the question of what are the impacts of this type of intervention, both in returning people to care as well as maintaining them over time. -->
-- A study was conducted in Zambia to improve estimates of baseline mortality due to HIV
-- A subset of individuals who were lost to follow up were assigned to receive extra care through follow up outreach by community health workers 
+- A 2015-2017 study was conducted in Zambia to improve estimates of baseline mortality due to HIV
+- A subset of individuals who were lost to follow up were randomized to receive extra care through follow up outreach by community health workers 
 - What are the impacts of this type of intervention
   - Returning people to care 
   - Maintaining care over time.
@@ -32,7 +32,7 @@ library(kableExtra)
 ## Target Population
 \textbf{Pop 1}
 
-Zambian, HIV positive adult patients on ART who are lost to follow-up ($\geq 90$ days late for their last appointment or $\geq 180$ days without clinic visit for patients with no appointment recorded at last visit).
+Zambian, HIV positive adult patients on ART who are lost to follow-up ($\geq 90$ days late for their last appointment or $\geq 180$ days without clinic visit for patients with no future appointment scheduled at their last visit).
 
 \vspace{.25in}
 
@@ -42,35 +42,39 @@ Patients satisfying the above criteria who have also already returned to care.
 
 ## Data 1
 
-Data is $O = (W, A, \tilde{T}, \Delta)$, where $\tilde{T} = \min(T, C)$ and $\Delta = \mathbb{I}(T \leq C)$
+\[O = (W, A, \tilde{T}, \Delta)\text{, where } \tilde{T} = \min(T, C)\text{ and }\Delta = \mathbb{I}(T \leq C)\]
 
 - $W$ = province, facility type, facility size, gender, marital status, education, income, age, WHO HIV stage at enrollment, medication possession ratio, enrollment CD4, initiation CD4, last CD4, HIV status disclosed, time enrolled, time on ART, time lost, number of prior lost events
 - $A$ = Assignment to tracing as defined as in-depth review of paper and EMRs, phone calls, in-person tracing in community (using bicycles, public transport, study vehicles, or motorcycles) by peer health workers at least 3 times.
-- $T$ = Time to patients' first post-LTFU clinic visit
-- $C$ = Time to end of study
+- $T$ = Time to return (first post-LTFU clinic visit - lost date)
+- $C$ = Time to end of study (study end - lost date)
 
 ## Data 2
 Data $O = (W, A, \tilde{T}, \Delta)$, where $\tilde{T} = \min(T, C)$ and $\Delta = \mathbb{I}(T \leq C)$
 
-- $W$ stays the same
-- $A$ stays the same
-- $T$ = Time to patients' first missed post-return appointment or 90 day period without visit or appointment (relapsed LTFU)
+- $W$ = same as above
+- $A$ = same as above
+- $T$ = Time to repeat LTFU (as defined on Slide 4)
 - $C$ = Time to end of study
+
+\vspace{.2in}
+\textit{Contingent on having sufficient support in data}
 
 
 ## Target Parameter
-$S(t) \mid A = 1$ and $S(t) \mid A = 0$ where
+The survival curves of the treatment and control groups $S_0(t) \mid A = 1$ and $S_0(t) \mid A = 0$ where
 \begin{align*}
-S_a(t) &= \prod\limits_{s \in [0, t]}\left\{1 - d\lambda_{0,a}(s)\right\}\\
-&= \prod\limits_{i=1}^{K}\left\{1 - \lambda_{0,a}(s_i)\right\}
+S_0(t) \mid A = a \quad &= \prod\limits_{s \in [0, t]}\left\{1 - d\lambda_{0}(s) \mid A = a\right\}\\
+&= \prod\limits_{i=1}^{n}\left\{1 - \lambda_{0}(s_i) \mid A = a\right\}
 \end{align*}
 
-We're interested in comparing the impact of tracing assignment on (1) time to return to care and (2) retention in care.
+We're interested in comparing the impact of tracing assignment on (1) time to return to care and (2) duration of retention in care.
 
 ## Challenges
-- Prior experience suggests we will likely be utilizing simulation heavily because our available data may not be suited for this analysis.
-  - Actual delivery of treatment occurs over an unknown period of time, so we'll be assuming A is delivered immediately upon being LTFU
-  - The full data set is very large, often results in computational challenges
+- We plan to lean on simulation because of concerns regarding the available data.
+  - Delivery of actual treatment occurs inconsistently and over an unknown period of time. To move forward we will unrealistically assume that treatment is delivered immediately upon a patient becoming LTFU.
+  - Loss to follow-up (censoring) caused by death. Previously reported estimated 2 year mortality rate is ~7%. For simplicity we may simply ignore this (as depicted in the above descriptions of $O$) or make the dubitable claim of CAR conditional on baseline covariates.
+  - The full data set is very large and may result in computational challenges
 
 ## Contributions
-We anticipate work will be conducted jointly across all tasks with equal contributions by both parties
+We anticipate all work will be conducted jointly with equal contribution from each party
