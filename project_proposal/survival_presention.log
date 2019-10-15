@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.14)  15 OCT 2019 12:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.14)  15 OCT 2019 12:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1321,7 +1321,7 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <6> not available
 [4
 
 ]
-Overfull \vbox (10.11044pt too high) detected at line 191
+Overfull \vbox (9.50209pt too high) detected at line 191
  []
 
 [5
@@ -1390,7 +1390,7 @@ exmf-dist/fonts/type1/public/lm/lmsso8.pfb></home/imbroglio-dc/texlive/2019/tex
 mf-dist/fonts/type1/public/lm/lmsy10.pfb></home/imbroglio-dc/texlive/2019/texmf
 -dist/fonts/type1/public/lm/lmsy8.pfb></home/imbroglio-dc/texlive/2019/texmf-di
 st/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on survival_presention.pdf (9 pages, 131077 bytes).
+Output written on survival_presention.pdf (9 pages, 131067 bytes).
 PDF statistics:
  135 PDF objects out of 1000 (max. 8388607)
  105 compressed objects within 2 object streams

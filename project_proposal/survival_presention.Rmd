@@ -46,8 +46,8 @@ Patients satisfying the above criteria who have also already returned to care.
 
 - $W$ = province, facility type, facility size, gender, marital status, education, income, age, WHO HIV stage at enrollment, medication possession ratio, enrollment CD4, initiation CD4, last CD4, HIV status disclosed, time enrolled, time on ART, time lost, number of prior lost events
 - $A$ = Assignment to tracing as defined as in-depth review of paper and EMRs, phone calls, in-person tracing in community (using bicycles, public transport, study vehicles, or motorcycles) by peer health workers at least 3 times.
-- $T$ = Time to return (first post-LTFU clinic visit - lost date)
-- $C$ = Time to end of study (study end - lost date)
+- $T$ = Time from loss to return (first post-LTFU clinic visit)
+- $C$ = Time from loss to end of study
 
 ## Data 2
 Data $O = (W, A, \tilde{T}, \Delta)$, where $\tilde{T} = \min(T, C)$ and $\Delta = \mathbb{I}(T \leq C)$
@@ -59,6 +59,7 @@ Data $O = (W, A, \tilde{T}, \Delta)$, where $\tilde{T} = \min(T, C)$ and $\Delta
 
 \vspace{.2in}
 \textit{Contingent on having sufficient support in data}
+
 
 
 ## Target Parameter
