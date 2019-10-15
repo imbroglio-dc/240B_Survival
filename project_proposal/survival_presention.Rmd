@@ -1,0 +1,60 @@
+---
+title: "Effect of Tracing on Time to Return for LTFU HIV Patients"
+author: "David Chen & Max Murphy"
+date: "10/14/2019"
+output: 
+  beamer_presentation:
+    theme: "metropolis"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+```
+
+## Target Population
+\textbf{Pop 1}
+
+Zambian, HIV positive adult patients on ART who are lost to follow-up ($\geq 90$ days late for their last appointment or $\geq 180$ days without clinic visit for patients with no appointment recorded at last visit).
+
+\vspace{.25in}
+
+\textbf{Pop 2}
+
+Patients satisfying the above criteria who have also already returned to care.
+
+## Data 1
+
+Data is $O = (W, A, \tilde{T}, \Delta)$, where $\tilde{T} = \min(T, C)$ and $\Delta = \mathbb{I}(T \leq C)$
+
+- $W$ = province, facility type, facility size, gender, marital status, education, income, age, WHO HIV stage at enrollment, medication possession ratio, enrollment CD4, initiation CD4, last CD4, HIV status disclosed, time enrolled, time on ART, time lost, number of prior lost events
+- $A$ = Assignment to tracing as defined as in-depth review of paper and EMRs, phone calls, in-person tracing in community (using bicycles, public transport, study vehicles, or motorcycles) by peer health workers at least 3 times.
+- $T$ = Time to patients' first post-LTFU clinic visit
+- $C$ = Time to end of study
+
+## Data 2
+Data $O = (W, A, \tilde{T}, \Delta)$, where $\tilde{T} = \min(T, C)$ and $\Delta = \mathbb{I}(T \leq C)$
+
+- $W$ stays the same
+- $A$ stays the same
+- $T$ = Time to patients' first missed post-return appointment or 90 day period without visit or appointment
+- $C$ = Time to end of study
+
+
+## Target Parameter
+$S(t) \mid A = 1$ and $S(t) \mid A = 0$ where
+\begin{align*}
+S_a(t) &= \prod\limits_{s \in [0, t]}\left\{1 - d\lambda_{0,a}(s)\right\}\\
+&= \prod\limits_{i=1}^{K}\left\{1 - \lambda_{0,a}(s_i)\right\}
+\end{align*}
+
+We're interested in comparing the impact of tracing assignment on (1) time to return to care and (2) retention in care.
+
+## Challenges
+- We will be using simulation because our true data is not suited for this analysis.
+Actual delivery of treatment occurs over an unknown period of time, so we'll be assuming A is delivered immediately upon being LTFU
+- Computational issues ?
+
+## Group
