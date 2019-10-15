@@ -74,7 +74,7 @@ We're interested in comparing the impact of tracing assignment on (1) time to re
 ## Challenges
 - We plan to lean on simulation because of concerns regarding the available data.
   - Delivery of actual treatment occurs inconsistently and over an unknown period of time. To move forward we will unrealistically assume that treatment is delivered immediately upon a patient becoming LTFU.
-  - Loss to follow-up (censoring) caused by death. Previously reported estimated 2 year mortality rate is ~7%. For simplicity we may simply ignore this (as depicted in the above descriptions of $O$) or make the dubitable claim of CAR conditional on baseline covariates.
+  - Loss to follow-up (censoring) caused by death. Previously reported estimated 2 year mortality rate is ~7% among all patients LTFU. For simplicity we may simply ignore this censoring, as reflected in our above descriptions of $O$, or make the practically dubitable claim of CAR conditional on baseline covariates and simulate death times.
   - The full data set is very large and may result in computational challenges
 
 ## Contributions
