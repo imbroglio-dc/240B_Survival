@@ -1,5 +1,5 @@
 ---
-title: "Effect of Tracing on Time to Return for LTFU HIV Patients"
+title: "Impact of Tracing on LTFU HIV Patients"
 author: "David Chen & Max Murphy"
 date: "10/14/2019"
 output: 
@@ -13,6 +13,21 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 ```
+
+## Group Introduction
+- David Chen
+  - Masters of Biostatistics with interests in approaches to optimal dynamic treatment and psychiatric disorders
+  
+- Max Murphy
+  - PhD. Biostatistics working on malaria transmission dynamics jointly with Dr. Rasmus Nielsen at UCB and Dr. Bryan Greenhouse at UCSF
+
+## Study Background
+<!-- A study was conducted in Zambia to improve estimates of baseline mortality due to HIV. In the context of this observational study, a subset of individuals who were lost to follow up were assigned to receive extra care through follow up outreach by community health workers. This raises the question of what are the impacts of this type of intervention, both in returning people to care as well as maintaining them over time. -->
+- A study was conducted in Zambia to improve estimates of baseline mortality due to HIV
+- A subset of individuals who were lost to follow up were assigned to receive extra care through follow up outreach by community health workers 
+- What are the impacts of this type of intervention
+  - Returning people to care 
+  - Maintaining care over time.
 
 ## Target Population
 \textbf{Pop 1}
@@ -39,7 +54,7 @@ Data $O = (W, A, \tilde{T}, \Delta)$, where $\tilde{T} = \min(T, C)$ and $\Delta
 
 - $W$ stays the same
 - $A$ stays the same
-- $T$ = Time to patients' first missed post-return appointment or 90 day period without visit or appointment
+- $T$ = Time to patients' first missed post-return appointment or 90 day period without visit or appointment (relapsed LTFU)
 - $C$ = Time to end of study
 
 
@@ -53,8 +68,9 @@ S_a(t) &= \prod\limits_{s \in [0, t]}\left\{1 - d\lambda_{0,a}(s)\right\}\\
 We're interested in comparing the impact of tracing assignment on (1) time to return to care and (2) retention in care.
 
 ## Challenges
-- We will be using simulation because our true data is not suited for this analysis.
-Actual delivery of treatment occurs over an unknown period of time, so we'll be assuming A is delivered immediately upon being LTFU
-- Computational issues ?
+- Prior experience suggests we will likely be utilizing simulation heavily because our available data may not be suited for this analysis.
+  - Actual delivery of treatment occurs over an unknown period of time, so we'll be assuming A is delivered immediately upon being LTFU
+  - The full data set is very large, often results in computational challenges
 
-## Group
+## Contributions
+We anticipate work will be conducted jointly across all tasks with equal contributions by both parties
