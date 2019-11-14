@@ -6,6 +6,7 @@ output:
   beamer_presentation:
     theme: "metropolis"
     latex_engine: lualatex
+    fig_crop: false
 ---
 
 ```{r setup, include=FALSE}
@@ -14,6 +15,7 @@ library(tidyverse)
 library(skimr)
 library(survival)
 library(survminer)
+library(table1)
 
 full_data <- read_csv('../data/imputed_data.csv', col_types = cols(
     .default = col_double(),
@@ -78,9 +80,11 @@ We're interested in comparing the impact of tracing assignment on (1) time to re
     - `r nrow(txt_data)` individuals assigned to treatment
     - `r nrow(control_data)` individuals assigned to control
 
-## Treatment Group
-
-## Control Group
+## Characteristics
+```{r table_1, echo=FALSE, fig.align='center', fig.height=2}
+# table1(~ age + province + fac_type + educ + enroll_HIV_stage + hh_inc + factor(male) | factor(traced), data = full_data)
+knitr::include_graphics('table1.png')
+```
 
 ## Progress - Analysis
 - Currently exploring techniques of estimating survival curves
