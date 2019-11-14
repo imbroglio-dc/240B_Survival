@@ -92,7 +92,27 @@ We're interested in comparing the impact of tracing assignment on (1) time to re
 # label(full_data$enroll_HIV_stage) <- 'HIV Stage at Enrollment'
 # label(full_data$hh_inc) <- 'Household Income'
 # label(full_data$sex) <- 'Sex'
+# label(full_data$traced_pretty) <- 'Traced Status'
+# full_data$event_return_pretty <- factor(full_data$event_return, levels = c(0, 1), labels = c('Censored', 'Returned'))
+# full_data$event_ltfu_pretty <- factor(full_data$event_ltfu, levels = c(0, 1), labels = c('Censored', 'Re-LTFU'))
 # table1(~ age + province + fac_type + educ + enroll_HIV_stage + hh_inc + sex | traced_pretty, data = full_data)
+# table1(~ age + province + fac_type + educ + enroll_HIV_stage + hh_inc + sex + traced_pretty | event_return_pretty, data = full_data)
+# 
+# ltfu_data <- full_data %>% filter(event_return == 1)
+# ltfu_data$sex <- factor(ltfu_data$male, levels = c(0, 1), labels = c('Female', 'Male'))
+# ltfu_data$traced_pretty <- factor(ltfu_data$traced, levels = c(0, 1), labels = c('Untraced', 'Traced'))
+# ltfu_data$hh_inc <- factor(ltfu_data$hh_inc, levels=c('<50K', '50-99K', '100-199K', '200-499K', '>500K'))
+# label(ltfu_data$age) <- 'Age'
+# label(ltfu_data$province) <- 'Province'
+# label(ltfu_data$fac_type) <- 'Facility Type'
+# label(ltfu_data$educ) <- 'Education Level'
+# label(ltfu_data$enroll_HIV_stage) <- 'HIV Stage at Enrollment'
+# label(ltfu_data$hh_inc) <- 'Household Income'
+# label(ltfu_data$sex) <- 'Sex'
+# label(ltfu_data$traced_pretty) <- 'Traced Status'
+# ltfu_data$event_return_pretty <- factor(ltfu_data$event_return, levels = c(0, 1), labels = c('Censored', 'Returned'))
+# ltfu_data$event_ltfu_pretty <- factor(ltfu_data$event_ltfu, levels = c(0, 1), labels = c('Censored', 'Re-LTFU'))
+# table1(~ age + province + fac_type + educ + enroll_HIV_stage + hh_inc + sex + traced_pretty | event_ltfu_pretty, data = ltfu_data)
 knitr::include_graphics('table1.png')
 ```
 
@@ -100,14 +120,26 @@ knitr::include_graphics('table1.png')
 - Currently exploring techniques of estimating survival curves
     - Attempting to use `survtmle` and `MOSS`
     - Issues with `MOSS` on this data set, experiencing memory usage problems
-    
-## Time to Return
+
+## Time to Return Characteristics
+
+```{r time_to_return_characateristics, echo=FALSE, fig.align='center'}
+knitr::include_graphics('returned_event_table1.png')
+```
+
+## Time to Return Survival Curve
 ``` {r time_to_return_surv}
 time_to_return_survplot <- ggsurvplot(survfit(Surv(T_return, event_return, type = 'right') ~ traced, 
                                               data = full_data, type = 'kaplan-meier', conf.int = .95), 
                                       conf.int = T, pval = T, risk.table = T, legend = 'bottom')
 time_to_return_survplot$plot <- time_to_return_survplot$plot + ggtitle("Time to Return")
 time_to_return_survplot
+```
+
+## Time to Return Characteristics
+
+```{r time_to_ltfu_characteristics, echo=FALSE, fig.align='center'}
+knitr::include_graphics('ltfu_event_table1.png')
 ```
 
 ## Lost To Follow Up
