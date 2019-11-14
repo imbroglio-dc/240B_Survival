@@ -17,22 +17,7 @@ library(survival)
 library(survminer)
 library(table1)
 
-full_data <- read_csv('../data/imputed_data.csv', col_types = cols(
-    .default = col_double(),
-    fac = col_factor(),
-    province = col_factor(),
-    fac_type = col_factor(),
-    educ = col_factor(),
-    educ_imp = col_logical(),
-    enroll_HIV_stage_imp = col_logical(),
-    hh_inc = col_factor(),
-    hh_inc_imp = col_logical(),
-    male_imp = col_logical(),
-    marital = col_factor(),
-    marital_imp = col_logical(),
-    mpr_days_imp = col_logical(),
-    mpr_imp = col_logical()
-))
+full_data <- read_rds("../data/imputed_data.RDS")
 
 txt_data <- full_data %>% filter(traced == 1)
 control_data <- full_data %>% filter(traced == 0)

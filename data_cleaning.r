@@ -177,11 +177,12 @@ data <- inner_join(inner_join(outcomes, facilities), inner_join(ltfu_hx, individ
     mutate(T_return = case_when(is.infinite(T_return) ~ study_end, 
                                 T ~ T_return), 
            T_ltfu = case_when(is.infinite(T_ltfu) ~ study_end, 
-                                T ~ T_ltfu))
+                                T ~ T_ltfu - T_return))
+
 
 rm(list = ls(pattern="[^data]"))
 setwd("~/projects/240B_Survival/")
-write_csv(data, path = "data/cleaned_data.csv")
+saveRDS(data, file = "data/cleaned_data.RDS")
 
 
 
@@ -211,7 +212,7 @@ imputed_data <- imputed_data %>%
 
 imputed_data <- imputed_data[, c(1:9, 9+order(colnames(imputed_data)[-c(1:9)]))]
 
-write_csv(imputed_data, "./data/imputed_data.csv")
+saveRDS(imputed_data, "data/imputed_data.RDS")
 
 
 
