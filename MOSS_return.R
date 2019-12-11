@@ -3,18 +3,15 @@ library(MOSS)
 source(file = "my_init_sl_fit.R")
 set.seed(0)
 
+options(na.action = na.omit)
+
 full_data <- read_rds("data/imputed_data.RDS")
 data <- dplyr::select(full_data, 
-                      province, fac_type, fac_size, 
+                      province, fac_type, fac_size,
                       mpr, mpr_imp, yrs_ART, lost_eps, 
                       traced, T_return, event_return) %>% 
-    dplyr::filter(T_return > 0) %>% 
     sample_n(15e3) %>% 
-    mutate(T_return = T_return %/% 14,
-           event_return = case_when(T_return > 72 ~ 0, 
-                                    TRUE ~ event_return),
-           T_return = case_when(T_return > 72 ~ 72, 
-                                TRUE ~ T_return))
+    mutate(T_return = pmin(74, T_return %/% 14 + 1))
 
 sl_lib_g <- c("SL.glm")
 sl_lib_censor <- c("SL.mean", "SL.glm", "sl_xgboost")
@@ -36,9 +33,9 @@ sl_fit <- my_init_sl_fit(
                      shuffle = TRUE, validRows = NULL)
 )
 
-k_grid <- 1:max(data$T_return)
-sl_fit$density_failure_1$t <- k_grid
-sl_fit$density_failure_0$t <- k_grid
+k_grid <- sl_fit$density_failure_1$t
+# sl_fit$density_failure_1$t <- k_grid
+# sl_fit$density_failure_0$t <- k_grid
 
 sl_fit$density_failure_1$hazard_to_survival()
 sl_fit$density_failure_0$hazard_to_survival()
@@ -61,7 +58,7 @@ hazard_fit_1 <- MOSS_hazard$new(
 )
 
 hazard_1 <- hazard_fit_1$iterate_onestep(
-    epsilon = 5e-2, max_num_interation = 10, verbose = TRUE, method = 'glm'
+    epsilon = 5e-2, max_num_interation = 15, verbose = TRUE, method = 'glm'
 )
 saveRDS(hazard_1, file = "data/hazard_1.RDS")
 
@@ -83,11 +80,11 @@ std_err <- compute_simultaneous_ci(eic_matrix)
 upper_bound <- pmin(surv_est + 1.96 * std_err, 1)
 lower_bound <- surv_est - 1.96 * std_err
 
-out_df <- data.frame(days = 14*(1:length(upper_bound)),
+out_df <- data.frame(days = 14 * (k_grid - 1),
                      lost = surv_est, 
                      u = upper_bound, 
                      l = lower_bound, 
-                     type = rep("A = 1", length(upper_bound)))
+                     type = "A = 1")
 
 
 
@@ -104,7 +101,7 @@ hazard_fit_0 <- MOSS_hazard$new(
 )
 
 hazard_0 <- hazard_fit_0$iterate_onestep(
-    epsilon = 5e-2, max_num_interation = 25, verbose = TRUE, method = 'glm'
+    epsilon = 5e-2, max_num_interation = 15, verbose = TRUE, method = 'glm'
 )
 saveRDS(hazard_0, file = "data/hazard_0.RDS")
 
@@ -126,17 +123,18 @@ std_err <- compute_simultaneous_ci(eic_matrix)
 upper_bound <- pmin(surv_est + 1.96 * std_err, 1)
 lower_bound <- surv_est - 1.96 * std_err
 
-out_df <- data.frame(days = 14*(1:length(upper_bound)),
+out_df <- data.frame(days = 14 * (k_grid - 1),
                      lost = surv_est, 
                      u = upper_bound, 
                      l = lower_bound, 
-                     type = rep("A = 0", length(upper_bound))) %>% 
+                     type = "A = 0") %>% 
     rbind(out_df, .)
 
 
 # Combined Survival Plot --------------------------------------------------
 
 combined_plot <- out_df %>% 
+    filter(days < 700) %>% 
     ggplot(aes(x = days, y = lost)) +
     # Add a ribbon with the confidence band
     geom_smooth(aes(ymin = l, ymax = u, fill = type, colour = type), 

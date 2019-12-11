@@ -8,12 +8,9 @@ data <- dplyr::select(full_data,
                       province, fac_type, fac_size, 
                       mpr, mpr_imp, yrs_ART, lost_eps, 
                       traced, T_ltfu, event_ltfu) %>% 
-    dplyr::filter(T_ltfu > 0, !is.infinite(T_ltfu)) %>% 
-    mutate(T_ltfu = T_ltfu %/% 14, 
-           event_ltfu = case_when(T_ltfu > 72 ~ 0, 
-                                    TRUE ~ event_ltfu),
-           T_ltfu = case_when(T_ltfu > 72 ~ 72,
-                                TRUE ~ T_ltfu))
+    dplyr::filter(!is.infinite(T_ltfu)) %>% 
+    mutate(T_ltfu = T_ltfu %/% 14 + 1) %>% 
+    dplyr::filter(T_ltfu < 68)
 
 sl_lib_g <- c("SL.glm")
 sl_lib_censor <- c("SL.mean", "SL.glm", "sl_xgboost")
@@ -35,9 +32,9 @@ sl_fit <- my_init_sl_fit(
                      shuffle = TRUE, validRows = NULL)
 )
 
-k_grid <- 1:max(data$T_ltfu)
-sl_fit$density_failure_1$t <- k_grid
-sl_fit$density_failure_0$t <- k_grid
+k_grid <- sl_fit$density_failure_1$t
+# sl_fit$density_failure_1$t <- k_grid
+# sl_fit$density_failure_0$t <- k_grid
 
 sl_fit$density_failure_1$hazard_to_survival()
 sl_fit$density_failure_0$hazard_to_survival()
@@ -60,7 +57,7 @@ hazard_fit_1 <- MOSS_hazard$new(
 )
 
 hazard_1 <- hazard_fit_1$iterate_onestep(
-    epsilon = 5e-2, max_num_interation = 25, verbose = TRUE, method = 'glm'
+    epsilon = 5e-2, max_num_interation = 10, verbose = TRUE, method = 'glm'
 )
 saveRDS(hazard_1, file = "data/hazard_1_reloss.RDS")
 
@@ -82,11 +79,11 @@ std_err <- compute_simultaneous_ci(eic_matrix)
 upper_bound <- pmin(surv_est + 1.96 * std_err, 1)
 lower_bound <- surv_est - 1.96 * std_err
 
-out_df <- data.frame(days = 14*(1:length(upper_bound)),
+out_df <- data.frame(days = 14*(k_grid - 1),
                      lost = surv_est, 
                      u = upper_bound, 
                      l = lower_bound, 
-                     type = rep("A = 1", length(upper_bound)))
+                     type = "A = 1")
 
 
 
@@ -103,7 +100,7 @@ hazard_fit_0 <- MOSS_hazard$new(
 )
 
 hazard_0 <- hazard_fit_0$iterate_onestep(
-    epsilon = 5e-2, max_num_interation = 25, verbose = TRUE, method = 'glm'
+    epsilon = 5e-2, max_num_interation = 10, verbose = TRUE, method = 'glm'
 )
 saveRDS(hazard_0, file = "data/hazard_0_reloss.RDS")
 
@@ -125,11 +122,11 @@ std_err <- compute_simultaneous_ci(eic_matrix)
 upper_bound <- pmin(surv_est + 1.96 * std_err, 1)
 lower_bound <- surv_est - 1.96 * std_err
 
-out_df <- data.frame(days = 14*(1:length(upper_bound)),
+out_df <- data.frame(days = 14*(k_grid - 1),
                      lost = surv_est, 
                      u = upper_bound, 
                      l = lower_bound, 
-                     type = rep("A = 0", length(upper_bound))) %>% 
+                     type = "A = 0") %>% 
     rbind(out_df, .)
 
 
