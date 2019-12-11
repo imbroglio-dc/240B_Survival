@@ -101,7 +101,7 @@ my_init_sl_fit <- function (T_tilde, Delta, A, W, t_max, sl_failure = c("SL.glm"
 
 sl_xgboost <- function (Y, X, newX, family, obsWeights, id, ntrees = 800, 
                         max_depth = 4, shrinkage = 0.1, minobspernode = 10, params = list(), 
-                        nthread = 5, verbose = FALSE, save_period = NULL, ...) 
+                        nthread = 6, verbose = FALSE, save_period = NULL, ...) 
 {
     SuperLearner:::.SL.require("xgboost")
     if (packageVersion("xgboost") < 0.6) 
