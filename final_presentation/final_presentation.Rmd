@@ -149,8 +149,8 @@ Thus our target parameter of interest only depends on $Q_W$ and $\lambda$.
     - mean, glm, bayes glm, xgboost, stepwise forward regression
 
 
-## Initial Estimates
-
+## Initial SL Estimates
+\includegraphics[height=3.3in]{init_sl_fits.pdf}
 
 ## TMLE Update
 
