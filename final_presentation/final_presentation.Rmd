@@ -18,9 +18,12 @@ library(survminer)
 library(table1)
 
 full_data <- read_rds("../data/imputed_data.RDS") %>% filter()
-
 txt_data <- full_data %>% filter(traced == 1)
 control_data <- full_data %>% filter(traced == 0)
+
+returned <- filter(full_data, !is.infinite(T_ltfu))
+txt_returned <- returned %>% filter(traced == 1)
+control_returned <- returned %>% filter(traced == 0)
 ```
 
 ## Group Introduction
@@ -35,8 +38,8 @@ control_data <- full_data %>% filter(traced == 0)
 - A 2015-2017 study was conducted in Zambia to improve estimates of baseline mortality due to HIV
 - A subset of individuals who were lost to follow up were randomized to receive extra care through follow up outreach by community health workers 
 - What are the impacts of this type of intervention
-  - Returning people to care 
-  - Maintaining care over time.
+  - Returning people to care?
+  - Retention in care over time?
 
 ## Target Population
 \textbf{Pop 1}
@@ -47,7 +50,7 @@ Zambian, HIV positive adult patients on ART who are lost to follow-up ($\geq 90$
 
 \textbf{Pop 2}
 
-Patients satisfying the above criteria who have also already returned to care.
+The subset of patients satisfying the above criteria who have also returned to care in the study period.
 
 ## Target Parameter
 The treatment specific survival curve
@@ -57,14 +60,17 @@ The treatment specific survival curve
     S_0(t_0 | A, W) = \prod_{t \in [0, t_0]}(1 - \Lambda_0(dt | A, W))
 \end{align*}
 
-We're interested in comparing the impact of tracing assignment on (1) time to return to care and (2) duration of retention in care.
+We're interested in comparing the impact of tracing assignment on (1) time to return to care and (2) duration of retention in care (assuming tracing has no effect on return to care)
 
 ## Progress - Data Processing
 - Conducted data cleaning and imputation of missing values
-- Compiled data set consisting of `r nrow(full_data)` entries
+- Pop 1: Data set consisting of `r nrow(full_data)` entries
     - `r nrow(txt_data)` individuals assigned to treatment
     - `r nrow(control_data)` individuals assigned to control
-
+- Pop 2: Data set consisting of `r nrow(returned)` entries
+    - `r nrow(txt_returned)` individuals assigned to treatment
+    - `r nrow(control_returned)` individuals assigned to control
+    
 ## Characteristics
 ```{r table_1, echo=FALSE, fig.align='center', fig.height=2}
 # full_data$sex <- factor(full_data$male, levels = c(0, 1), labels = c('Female', 'Male'))
