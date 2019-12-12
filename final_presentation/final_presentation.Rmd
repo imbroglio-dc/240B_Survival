@@ -52,12 +52,6 @@ Zambian, HIV positive adult patients on ART who are lost to follow-up ($\geq 90$
 
 The subset of patients satisfying the above criteria who have also returned to care in the study period.
 
-## Target Parameter
-- The treatment specific survival curve, where $d(W)$ is a rule of interest.
-- Our intervention $d(W)$ is actually a single time point static intervention - fixed to 1 or 0, reflecting the treatment specific survival curve of everyone receiving treatment vs. no one receiving treatment. 
-- Interested in comparing the impact of tracing assignment on 
-    - (1) time to return to care 
-    - (2) duration of retention in care (assuming tracing has no effect on return to care)
 
 ## Data 1
 
@@ -125,6 +119,13 @@ knitr::include_graphics('ltfu_event_table1.png')
 ```
 
 ## Target Parameter
+- The treatment specific survival curve, where $d(W)$ is a rule of interest.
+- Our intervention $d(W)$ is actually a single time point static intervention - fixed to 1 or 0, reflecting the treatment specific survival curve of everyone receiving treatment vs. no one receiving treatment. 
+- Interested in comparing the impact of tracing assignment on 
+    - (1) time to return to care 
+    - (2) duration of retention in care (assuming tracing has no effect on return to care)
+
+## Target Parameter
 \begin{align*}
     \Psi(P_0) = \mathbb{E}_{P_0}[S_0(t_0 | A = a, W)] \, , \, a \in \{0, 1\} \\
     S_0(t_0 | A, W) = \prod_{t \in [0, t_0]}(1 - \Lambda_0(dt | A, W))
@@ -132,7 +133,7 @@ knitr::include_graphics('ltfu_event_table1.png')
 
 Thus our target parameter of interest only depends on $Q_W$ and $\lambda$.
 
-## Plug-in Estimation
+- Plug-in Estimation
 \begin{align*}
     \Psi(Q_{W,n}, \lambda^*_n) = \frac{1}{n}\sum_{i = 1}^n S_{\lambda^*_n}(t_0 | A = a, W) \, , \, a \in \{0, 1\}
 \end{align*}
@@ -144,8 +145,8 @@ Thus our target parameter of interest only depends on $Q_W$ and $\lambda$.
     - Censoring Hazard
     \[ L(\lambda_c)(O) = \text{-} \left\{ \prod_{t \leq \tilde{T}} \lambda_c(t \mid A, W )^{dA_c(t)} (1 - \lambda_c(t \mid A, W ))^{1 - dA_c(t)}\right\} \]
 
-
-## Candidate Estimators
+- Candidate Estimators
+    - mean, glm, bayes glm, xgboost, stepwise forward regression
 
 
 ## Initial Estimates
