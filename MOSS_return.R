@@ -58,7 +58,7 @@ hazard_fit_1 <- MOSS_hazard$new(
 )
 
 hazard_1 <- hazard_fit_1$iterate_onestep(
-    epsilon = 5e-2, max_num_interation = 15, verbose = TRUE, method = 'glm'
+    epsilon = 5e-2, max_num_interation = 5, verbose = TRUE, method = 'glm'
 )
 saveRDS(hazard_1, file = "data/hazard_1.RDS")
 
@@ -101,7 +101,7 @@ hazard_fit_0 <- MOSS_hazard$new(
 )
 
 hazard_0 <- hazard_fit_0$iterate_onestep(
-    epsilon = 5e-2, max_num_interation = 15, verbose = TRUE, method = 'glm'
+    epsilon = 5e-2, max_num_interation = 5, verbose = TRUE, method = 'glm'
 )
 saveRDS(hazard_0, file = "data/hazard_0.RDS")
 
@@ -140,7 +140,7 @@ combined_plot <- out_df %>%
     geom_smooth(aes(ymin = l, ymax = u, fill = type, colour = type), 
                 stat = "identity") +
     xlab("Days") +
-    ylab("Proportion Lost") + 
+    ylab("Lost") + 
     theme_minimal()
 
 save.image("data/MOSS_return.RData")
