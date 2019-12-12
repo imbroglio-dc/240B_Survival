@@ -76,33 +76,6 @@ Data $O = (W, A, \tilde{T}, \Delta)$, where $\tilde{T} = \min(T, C)$ and $\Delta
 - $T$ = Time from return to 2nd LTFU (as defined on Slide 4)
 - $C$ = Time from return to end of study
 
-## Target Parameter
-\begin{align*}
-    \Psi(P_0) = \mathbb{E}_{P_0}[S_0(t_0 | A = a, W)] \, , \, a \in \{0, 1\} \\
-    S_0(t_0 | A, W) = \prod_{t \in [0, t_0]}(1 - \Lambda_0(dt | A, W))
-\end{align*}
-
-Thus our target parameter of interest only depends on $Q_W$ and $\lambda$.
-
-## Plug-in Estimation
-\begin{align*}
-    \Psi(Q_{W,n}, \lambda^*_n) = \frac{1}{n}\sum_{i = 1}^n S_{\lambda^*_n}(t_0 | A = a, W) \, , \, a \in \{0, 1\}
-\end{align*}
-    
-## Loss Function 
-- Log-likelihood loss
-    - Event (Return / Reloss) Hazard
-    \[ L(\lambda)(O) = \text{-} \left\{ \prod_{t \leq \tilde{T}} \lambda(t \mid A, W )^{dN(t)} (1 - \lambda(t \mid A, W ))^{1 - dN(t)}\right\} \]
-    - Censoring Hazard
-    \[ L(\lambda_c)(O) = \text{-} \left\{ \prod_{t \leq \tilde{T}} \lambda_c(t \mid A, W )^{dA_2(t)} (1 - \lambda_c(t \mid A, W ))^{1 - dA_2(t)}\right\} \]
-
-## Candidate Estimators
-
-
-## Initial Estimates
-
-## TMLE Update
-
 ## Characteristics
 ```{r table_1, echo=FALSE, fig.align='center', fig.height=2}
 # full_data$sex <- factor(full_data$male, levels = c(0, 1), labels = c('Female', 'Male'))
@@ -145,7 +118,43 @@ knitr::include_graphics('table1.png')
 knitr::include_graphics('returned_event_table1.png')
 ```
 
-## Time to Return Survival Curve
+## Time to ReLoss Characteristics
+
+```{r time_to_ltfu_characteristics, echo=FALSE, fig.align='center'}
+knitr::include_graphics('ltfu_event_table1.png')
+```
+
+## Target Parameter
+\begin{align*}
+    \Psi(P_0) = \mathbb{E}_{P_0}[S_0(t_0 | A = a, W)] \, , \, a \in \{0, 1\} \\
+    S_0(t_0 | A, W) = \prod_{t \in [0, t_0]}(1 - \Lambda_0(dt | A, W))
+\end{align*}
+
+Thus our target parameter of interest only depends on $Q_W$ and $\lambda$.
+
+## Plug-in Estimation
+\begin{align*}
+    \Psi(Q_{W,n}, \lambda^*_n) = \frac{1}{n}\sum_{i = 1}^n S_{\lambda^*_n}(t_0 | A = a, W) \, , \, a \in \{0, 1\}
+\end{align*}
+    
+## Loss Function 
+- Log-likelihood loss
+    - Event (Return / Reloss) Hazard
+    \[ L(\lambda)(O) = \text{-} \left\{ \prod_{t \leq \tilde{T}} \lambda(t \mid A, W )^{dN(t)} (1 - \lambda(t \mid A, W ))^{1 - dN(t)}\right\} \]
+    - Censoring Hazard
+    \[ L(\lambda_c)(O) = \text{-} \left\{ \prod_{t \leq \tilde{T}} \lambda_c(t \mid A, W )^{dA_c(t)} (1 - \lambda_c(t \mid A, W ))^{1 - dA_c(t)}\right\} \]
+
+
+## Candidate Estimators
+
+
+## Initial Estimates
+
+
+## TMLE Update
+
+
+## Time to Return Kaplan Meier
 ``` {r time_to_return_surv, warning=FALSE, message=FALSE}
 time_to_return_survplot <- ggsurvplot(survfit(Surv(T_return, event_return, type = 'right') ~ traced, 
                                               data = full_data, type = 'kaplan-meier', conf.int = .95), 
@@ -157,10 +166,9 @@ time_to_return_survplot$plot <- time_to_return_survplot$plot +
 time_to_return_survplot
 ```
 
-## Time to Return Characteristics
-
-```{r time_to_ltfu_characteristics, echo=FALSE, fig.align='center'}
-knitr::include_graphics('ltfu_event_table1.png')
+## Time to Return -- MOSS Estimate
+```{r time_to_return_moss}
+knitr::include_graphics('MOSS_return_plot.png')
 ```
 
 ## Lost To Follow Up
@@ -175,7 +183,12 @@ lost_to_follow_up_survplot$plot <- lost_to_follow_up_survplot$plot +
 lost_to_follow_up_survplot
 ```
 
-## Results
+## Lost To Follow Up -- MOSS Estimate
+```{r lost_to_follow_up_moss}
+knitr::include_graphics('MOSS_reloss_plot.png')
+```
+
+## Results - Return to Care
 
 ## Limitations
 
