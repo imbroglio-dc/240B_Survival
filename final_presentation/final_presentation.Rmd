@@ -17,7 +17,7 @@ library(survival)
 library(survminer)
 library(table1)
 
-full_data <- read_rds("../data/imputed_data.RDS") %>% filter()
+full_data <- read_rds("../data/imputed_data.RDS") %>% filter(T_return < 1000, T_ltfu < 1000)
 txt_data <- full_data %>% filter(traced == 1)
 control_data <- full_data %>% filter(traced == 0)
 
