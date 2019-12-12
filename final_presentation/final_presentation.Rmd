@@ -133,7 +133,9 @@ knitr::include_graphics('ltfu_event_table1.png')
 lost_to_follow_up_survplot <- ggsurvplot(survfit(Surv(T_ltfu, event_ltfu, type = 'right') ~ traced, 
                                                  data = full_data %>% filter(event_return == 1), type = 'kaplan-meier', conf.int = .95), 
                                          conf.int = T, pval = T, risk.table = T, legend = 'bottom')
-lost_to_follow_up_survplot$plot <- lost_to_follow_up_survplot$plot + ggtitle("Time to Lost To Follow Up")
+lost_to_follow_up_survplot$plot <- lost_to_follow_up_survplot$plot + 
+    ylim(.5, 1) +
+    ggtitle("Time to Lost To Follow Up")
 lost_to_follow_up_survplot
 ```
 
