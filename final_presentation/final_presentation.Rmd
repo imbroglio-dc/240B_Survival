@@ -59,6 +59,23 @@ The subset of patients satisfying the above criteria who have also returned to c
     - (1) time to return to care 
     - (2) duration of retention in care (assuming tracing has no effect on return to care)
 
+## Data 1
+
+\[O = (W, A, \tilde{T}, \Delta)\text{, where } \tilde{T} = \min(T, C)\text{ and }\Delta = \mathbb{I}(T \leq C)\]
+
+- $W$ = province, facility type, facility size, medication possession ratio (MPR, imputed), MPR Imputation Indicator, time on ART, number of prior lost events
+- $A$ = Assignment to tracing as defined as in-depth review of paper and EMRs, phone calls, in-person tracing in community (using bicycles, public transport, study vehicles, or motorcycles) by peer health workers at least 3 times.
+- $T$ = Time from loss to return (first post-LTFU clinic visit)
+- $C$ = Time from loss to end of study
+
+## Data 2
+Data $O = (W, A, \tilde{T}, \Delta)$, where $\tilde{T} = \min(T, C)$ and $\Delta = \mathbb{I}(T \leq C)$
+
+- $W$ = same as above
+- $A$ = same as above
+- $T$ = Time from return to 2nd LTFU (as defined on Slide 4)
+- $C$ = Time from return to end of study
+
 ## Target Parameter
 \begin{align*}
     \Psi(P_0) = \mathbb{E}_{P_0}[S_0(t_0 | A = a, W)] \, , \, a \in \{0, 1\} \\
