@@ -128,7 +128,7 @@ out_df <- data.frame(days = 14 * (k_grid - 1),
                      u = upper_bound, 
                      l = lower_bound, 
                      type = "A = 0") %>% 
-    rbind(out_df, .)
+    rbind(., out_df)
 
 
 # Combined Survival Plot --------------------------------------------------

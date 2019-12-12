@@ -5,7 +5,7 @@ date: "12/12/2019"
 output:
   beamer_presentation:
     theme: "metropolis"
-    latex_engine: lualatex
+    latex_engine: pdflatex
     fig_crop: false
 ---
 
@@ -172,34 +172,43 @@ Thus our target parameter of interest only depends on $Q_W$ and $\lambda$.
     \[ L(\lambda_c)(O) = \text{-} \left\{ \prod_{t \leq \tilde{T}} \lambda_c(t \mid A, W )^{dA_c(t)} (1 - \lambda_c(t \mid A, W ))^{1 - dA_c(t)}\right\} \]
 
 - Candidate Estimators
-    - mean, glm, bayes glm, xgboost, stepwise forward regression
+    - mean, glm, bayes glm$^*$, xgboost$^*$, stepwise forward regression
 
 
 ## Initial SL Estimates
 \includegraphics[height=3.3in]{init_sl_fits.pdf}
 
 ## TMLE Update
+\textbf{Efficient Influence Curve}
+\begin{align*}
+D^*(P)(O) &= D^*_0(Q) + \sum_{t=1}^{\tau} D^*_t(Q,G)\\
+D^*_t(Q, G) &= C_t(Q, G) \, I(\tilde{T} \geq t)(dN(t) - \lambda(t \mid A, W))
+\end{align*}
+
+\textbf{Clever Covariate}
+\[ C_t(Q, G) = \frac{I(A = a, \bar{A}_c(t-1) = 0)}{g(a \mid W) \prod\limits_{s \leq t-1}(1 - \lambda_c(s \mid A, W))} \frac{S(t_0\mid A, W)}{S(t \mid A, W)} \, , \, t \leq t_0 \]
+
+\textbf{Least Favorable Submodel with Log-Likelihood Loss}
+\[ \text{logit} \, \lambda_{n, \epsilon}(t \mid A, W) = \text{logit} \, \lambda_{n}(t \mid A, W) + \epsilon \, C_t(Q_n, G_n) \]
+
 
 ## Time to Return -- MOSS Estimate
-```{r time_to_return_moss}
-knitr::include_graphics('MOSS_return_plot.png')
-```
+\centering
+\includegraphics[height=5in]{MOSS_return.pdf}
 
 ## Lost To Follow Up -- MOSS Estimate
-```{r lost_to_follow_up_moss}
-knitr::include_graphics('MOSS_reloss_plot.png')
-```
+\includegraphics[height=5in]{MOSS_reloss.pdf}
 
 ## Results
-- We find no effect of follow up tracing on return to care in this population
-- We also find no effect of follow up tracing on remaining in care amongst those that do return to care at some point during the study
+- We find no significant effect of follow up tracing assignment on return to care in this population
+- We also find no significant effect of follow up tracing assignment on remaining in care amongst those that do return to care at some point during the study
 
 ## Limitations
-- The purpose of the tracing intervention was for information gathering rather than influencing a behavioral change
+- The primary purpose of the tracing intervention was information gathering rather than behavioral change
 - Our adjustment set has been heavily reduced due to computational burden
-- To consider our second question in a causal sense, we require treatment to be independent of return
+- To interpret our second question causally, we require treatment to be independent of return
 
 ## Conclusion
-- Thank you to Wilson Cai for his development of the MOSS package, Mark and Rachel for facilitating this course, and Elvin Geng et. al. for providing the data used
+- Thanks to Wilson Cai for MOSS, Mark and Rachel for facilitating this course, and Elvin Geng et. al. for our data.
 
 - Questions?
