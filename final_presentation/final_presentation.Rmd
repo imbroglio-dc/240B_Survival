@@ -197,9 +197,9 @@ knitr::include_graphics('MOSS_reloss_plot.png')
 ## Limitations
 - The purpose of the tracing intervention was for information gathering rather than influencing a behavioral change
 - Our adjustment set has been heavily reduced due to computational burden
-- To consider our second scenario, we need treatment to be independent of return
+- To consider our second question in a causal sense, we require treatment to be independent of return
 
 ## Conclusion
-- Thank you to Wilson Cai for his development of the MOSS package, Mark and Rachel for facilitating this course, and Elvin Geng et. al. for providing the data used.
+- Thank you to Wilson Cai for his development of the MOSS package, Mark and Rachel for facilitating this course, and Elvin Geng et. al. for providing the data used
 
 - Questions?
