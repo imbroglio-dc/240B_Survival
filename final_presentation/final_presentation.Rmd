@@ -112,11 +112,37 @@ knitr::include_graphics('table1.png')
 knitr::include_graphics('returned_event_table1.png')
 ```
 
+## Time to Return Kaplan Meier
+``` {r time_to_return_surv, warning=FALSE, message=FALSE}
+time_to_return_survplot <- ggsurvplot(survfit(Surv(T_return, event_return, type = 'right') ~ traced, 
+                                              data = full_data, type = 'kaplan-meier', conf.int = .95), 
+                                      conf.int = T, pval = T, risk.table = T, legend = 'bottom')
+time_to_return_survplot$plot <- time_to_return_survplot$plot + 
+    xlim(0, 1000) +
+    ylim(.5, 1) +
+    ggtitle("Time to Return")
+time_to_return_survplot
+```
+
 ## Time to ReLoss Characteristics
 
 ```{r time_to_ltfu_characteristics, echo=FALSE, fig.align='center'}
 knitr::include_graphics('ltfu_event_table1.png')
 ```
+
+
+## Time to ReLoss Kaplan Meier
+```{r lost_to_follow_up_surv, warning=FALSE, message=FALSE}
+lost_to_follow_up_survplot <- ggsurvplot(survfit(Surv(T_ltfu, event_ltfu, type = 'right') ~ traced, 
+                                                 data = full_data %>% filter(event_return == 1), type = 'kaplan-meier', conf.int = .95), 
+                                         conf.int = T, pval = T, risk.table = T, legend = 'bottom')
+lost_to_follow_up_survplot$plot <- lost_to_follow_up_survplot$plot + 
+    ylim(.5, 1) +
+    xlim(0, 1000) +
+    ggtitle("Time to Lost To Follow Up")
+lost_to_follow_up_survplot
+```
+
 
 ## Target Parameter
 - The treatment specific survival curve, where $d(W)$ is a rule of interest.
@@ -154,34 +180,9 @@ Thus our target parameter of interest only depends on $Q_W$ and $\lambda$.
 
 ## TMLE Update
 
-
-## Time to Return Kaplan Meier
-``` {r time_to_return_surv, warning=FALSE, message=FALSE}
-time_to_return_survplot <- ggsurvplot(survfit(Surv(T_return, event_return, type = 'right') ~ traced, 
-                                              data = full_data, type = 'kaplan-meier', conf.int = .95), 
-                                      conf.int = T, pval = T, risk.table = T, legend = 'bottom')
-time_to_return_survplot$plot <- time_to_return_survplot$plot + 
-    xlim(0, 1000) +
-    ylim(.5, 1) +
-    ggtitle("Time to Return")
-time_to_return_survplot
-```
-
 ## Time to Return -- MOSS Estimate
 ```{r time_to_return_moss}
 knitr::include_graphics('MOSS_return_plot.png')
-```
-
-## Lost To Follow Up
-```{r lost_to_follow_up_surv, warning=FALSE, message=FALSE}
-lost_to_follow_up_survplot <- ggsurvplot(survfit(Surv(T_ltfu, event_ltfu, type = 'right') ~ traced, 
-                                                 data = full_data %>% filter(event_return == 1), type = 'kaplan-meier', conf.int = .95), 
-                                         conf.int = T, pval = T, risk.table = T, legend = 'bottom')
-lost_to_follow_up_survplot$plot <- lost_to_follow_up_survplot$plot + 
-    ylim(.5, 1) +
-    xlim(0, 1000) +
-    ggtitle("Time to Lost To Follow Up")
-lost_to_follow_up_survplot
 ```
 
 ## Lost To Follow Up -- MOSS Estimate
@@ -189,8 +190,16 @@ lost_to_follow_up_survplot
 knitr::include_graphics('MOSS_reloss_plot.png')
 ```
 
-## Results - Return to Care
+## Results
+- We find no effect of follow up tracing on return to care in this population
+- We also find no effect of follow up tracing on remaining in care amongst those that do return to care at some point during the study
 
 ## Limitations
+- The purpose of the tracing intervention was for information gathering rather than influencing a behavioral change
+- Our adjustment set has been heavily reduced due to computational burden
+- To consider our second scenario, we need treatment to be independent of return
 
 ## Conclusion
+- Thank you to Wilson Cai for his development of the MOSS package, Mark and Rachel for facilitating this course, and Elvin Geng et. al. for providing the data used.
+
+- Questions?
