@@ -14,8 +14,8 @@ data <- dplyr::select(full_data,
     mutate(T_return = pmin(74, T_return %/% 14 + 1))
 
 sl_lib_g <- c("SL.glm")
-sl_lib_censor <- c("SL.mean", "SL.glm", "sl_xgboost")
-sl_lib_failure <- c("SL.mean", "SL.glm", "sl_xgboost", "SL.step.forward")
+sl_lib_censor <- c("SL.mean", "SL.glm", "SL.bayesglm")
+sl_lib_failure <- c("SL.mean", "SL.glm", "SL.bayesglm", "SL.step.forward")
 
 sl_fit <- my_init_sl_fit(
     T_tilde = data$T_return,
