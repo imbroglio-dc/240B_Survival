@@ -17,7 +17,7 @@ library(survival)
 library(survminer)
 library(table1)
 
-full_data <- read_rds("../data/imputed_data.RDS") %>% filter(T_return < 1000, T_ltfu < 1000)
+full_data <- read_rds("../data/imputed_data.RDS")
 txt_data <- full_data %>% filter(traced == 1)
 control_data <- full_data %>% filter(traced == 0)
 
@@ -53,24 +53,27 @@ Zambian, HIV positive adult patients on ART who are lost to follow-up ($\geq 90$
 The subset of patients satisfying the above criteria who have also returned to care in the study period.
 
 ## Target Parameter
-The treatment specific survival curve
+- The treatment specific survival curve, where $d(W)$ is a rule of interest.
+- $d(W)$ is fixed to 1 or 0, reflecting the treatment specific survival curve of everyone receiving treatment vs. no one receiving treatment. 
+- Interested in comparing the impact of tracing assignment on 
+    - (1) time to return to care 
+    - (2) duration of retention in care (assuming tracing has no effect on return to care)
 
+## Target Parameter
 \begin{align*}
-    \Psi(P_0) = \mathbb{E}_{P_0}[S_0(t_0 | A = d(w), W)] \\
+    \Psi(P_0) = \mathbb{E}_{P_0}[S_0(t_0 | A = d(W), W)] \\
     S_0(t_0 | A, W) = \prod_{t \in [0, t_0]}(1 - \Lambda_0(dt | A, W))
 \end{align*}
 
-We're interested in comparing the impact of tracing assignment on (1) time to return to care and (2) duration of retention in care (assuming tracing has no effect on return to care)
+Thus our target parameter of interest only depends on $Q_W$ and $\lambda$.
 
-## Progress - Data Processing
-- Conducted data cleaning and imputation of missing values
-- Pop 1: Data set consisting of `r nrow(full_data)` entries
-    - `r nrow(txt_data)` individuals assigned to treatment
-    - `r nrow(control_data)` individuals assigned to control
-- Pop 2: Data set consisting of `r nrow(returned)` entries
-    - `r nrow(txt_returned)` individuals assigned to treatment
-    - `r nrow(control_returned)` individuals assigned to control
+## Plug-in Estimation
+\begin{align*}
+    \Psi(Q_{W,n}, \lambda^*_n) = \frac{1}{n}\sum_{i = 1}^n S_{\lambda^*_n}(t_0 | A = d(W), W)
+\end{align*}
     
+##
+
 ## Characteristics
 ```{r table_1, echo=FALSE, fig.align='center', fig.height=2}
 # full_data$sex <- factor(full_data$male, levels = c(0, 1), labels = c('Female', 'Male'))
@@ -114,11 +117,14 @@ knitr::include_graphics('returned_event_table1.png')
 ```
 
 ## Time to Return Survival Curve
-``` {r time_to_return_surv}
+``` {r time_to_return_surv, warning=FALSE, message=FALSE}
 time_to_return_survplot <- ggsurvplot(survfit(Surv(T_return, event_return, type = 'right') ~ traced, 
                                               data = full_data, type = 'kaplan-meier', conf.int = .95), 
                                       conf.int = T, pval = T, risk.table = T, legend = 'bottom')
-time_to_return_survplot$plot <- time_to_return_survplot$plot + ggtitle("Time to Return")
+time_to_return_survplot$plot <- time_to_return_survplot$plot + 
+    xlim(0, 1000) +
+    ylim(.5, 1) +
+    ggtitle("Time to Return")
 time_to_return_survplot
 ```
 
@@ -129,12 +135,13 @@ knitr::include_graphics('ltfu_event_table1.png')
 ```
 
 ## Lost To Follow Up
-```{r lost_to_follow_up_surv}
+```{r lost_to_follow_up_surv, warning=FALSE, message=FALSE}
 lost_to_follow_up_survplot <- ggsurvplot(survfit(Surv(T_ltfu, event_ltfu, type = 'right') ~ traced, 
                                                  data = full_data %>% filter(event_return == 1), type = 'kaplan-meier', conf.int = .95), 
                                          conf.int = T, pval = T, risk.table = T, legend = 'bottom')
 lost_to_follow_up_survplot$plot <- lost_to_follow_up_survplot$plot + 
     ylim(.5, 1) +
+    xlim(0, 1000) +
     ggtitle("Time to Lost To Follow Up")
 lost_to_follow_up_survplot
 ```
