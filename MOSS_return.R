@@ -77,8 +77,8 @@ eic_fit <- eic$new(
 
 eic_matrix <- eic_fit$all_t(k_grid = k_grid)
 std_err <- compute_simultaneous_ci(eic_matrix)
-upper_bound <- pmin(surv_est + 1.96 * std_err, 1)
-lower_bound <- surv_est - 1.96 * std_err
+upper_bound <- pmin(surv_est + std_err, 1)
+lower_bound <- surv_est - std_err
 
 out_df <- data.frame(days = 14 * (k_grid - 1),
                      lost = surv_est, 
@@ -120,8 +120,8 @@ eic_fit <- eic$new(
 
 eic_matrix <- eic_fit$all_t(k_grid = k_grid)
 std_err <- compute_simultaneous_ci(eic_matrix)
-upper_bound <- pmin(surv_est + 1.96 * std_err, 1)
-lower_bound <- surv_est - 1.96 * std_err
+upper_bound <- pmin(surv_est + std_err, 1)
+lower_bound <- surv_est - std_err
 
 out_df <- data.frame(days = 14 * (k_grid - 1),
                      lost = surv_est, 
@@ -133,8 +133,7 @@ out_df <- data.frame(days = 14 * (k_grid - 1),
 
 # Combined Survival Plot --------------------------------------------------
 
-combined_plot <- out_df %>% 
-    filter(days < 700) %>% 
+combined_plot <- out_df %>%
     ggplot(aes(x = days, y = lost)) +
     # Add a ribbon with the confidence band
     geom_smooth(aes(ymin = l, ymax = u, fill = type, colour = type), 
